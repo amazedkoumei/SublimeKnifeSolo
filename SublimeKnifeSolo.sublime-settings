@@ -1,0 +1,18 @@
+{
+  // path to knife command
+  "path": "$HOME/.rbenv/shims/",
+  // list of parameter for ssh connection
+  "parameters": [
+    {
+      "host": "192.168.33.11",
+      "user": "vagrant",
+      "identity": "~/.vagrant.d/insecure_private_key"
+    },
+    {
+      "host": "192.168.33.11",
+      "user": "appuser",
+      "port": "22",
+      "password": ""
+    }
+  ]
+}

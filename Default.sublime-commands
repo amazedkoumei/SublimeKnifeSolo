@@ -1,0 +1,24 @@
+[
+  {
+    "caption": "Preferences: SublimeKnifeSolo Settings – Default",
+    "command": "open_file",
+    "args": {
+        "file": "${packages}/SublimeKnifeSolo/SublimeKnifeSolo.sublime-settings"
+    }
+  },
+  {
+    "caption": "Preferences: SublimeKnifeSolo Settings – User",
+    "command": "open_file",
+    "args": {
+        "file": "${packages}/User/SublimeKnifeSolo.sublime-settings"
+    }
+  },
+  {
+    "caption": "SublimeKnifeSolo: prepare",
+    "command": "knife_solo_prepare"
+  },
+  {
+    "caption": "SublimeKnifeSolo: cook",
+    "command": "knife_solo_cook"
+  }
+]
