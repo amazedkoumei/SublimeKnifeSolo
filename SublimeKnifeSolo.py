@@ -1,6 +1,10 @@
 import sublime, sublime_plugin, subprocess, threading, Queue, time, os
 from helper import AsynchronousFileReader, SublimeMessageManager
 
+# for debug. Is there a better way to reload the external module ?
+# import helper
+# reload(helper)
+
 class KnifeSolo(sublime_plugin.WindowCommand):
 
   def run(self):
@@ -49,6 +53,9 @@ class KnifeSolo(sublime_plugin.WindowCommand):
     thread = threading.Thread(target=runKnife, args=(p, self.messageManager))
     thread.start()
 
+    # http://docs.python.org/2/library/threading.html#threading.Thread.daemon
+    # The entire Python program exits when no alive non-daemon threads are left.
+
   def command(self):
     pass
 
@@ -71,29 +78,32 @@ def findSoloFile(dir_name):
 def runKnife(process, messageManager):
   # Launch the asynchronous readers of the process' stdout and stderr.
   stdout_queue = Queue.Queue()
-  stdout_reader = AsynchronousFileReader(process.stdout, stdout_queue)
+  stdout_reader = AsynchronousFileReader(process.stdout, stdout_queue, .1)
   stdout_reader.start()
   stderr_queue = Queue.Queue()
-  stderr_reader = AsynchronousFileReader(process.stderr, stderr_queue)
+  stderr_reader = AsynchronousFileReader(process.stderr, stderr_queue, .1)
   stderr_reader.start()
 
-  buff = []
-
   while not stdout_reader.eof() or not stderr_reader.eof():
-    if len(buff) > 0:
-      message = buff.pop(0)
-      sublime.set_timeout(lambda:messageManager.write(message), 0)
-
     while not stdout_queue.empty():
-      buff.append(stdout_queue.get())
-
+      sublime.set_timeout(lambda:messageManager.write(stdout_queue.get()), 0)
+      time.sleep(.1)
     while not stderr_queue.empty():
-      buff.append(stderr_queue.get())
-      
-    time.sleep(.1)
+      sublime.set_timeout(lambda:messageManager.write(stderr_queue.get()), 0)
+      time.sleep(.1)
 
   stdout_reader.join()
   stderr_reader.join()
 
   process.stdout.close()
   process.stderr.close()
+  sublime.set_timeout(lambda:messageManager.write(u"\n\n\n\n\nFINISH!!!"), 0)
+
+def getEncoding(str):
+  for encoding in ['utf-8', 'shift-jis', 'euc-jp']:
+    try:
+      str.decode(encoding)
+      return encoding
+    except:
+      pass
+  return None
