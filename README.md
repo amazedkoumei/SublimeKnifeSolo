@@ -13,10 +13,18 @@ OS Support
 
 Installation
 ----------------------------
+You need to pre-install [knife solo](http://matschaffer.github.com/knife-solo/)
 
+### with package controlle (recommended)
+If you have the [Package Control package](http://wbond.net/sublime_packages/package_control) installed, you can install from inside Sublime Text itself.
+
+1. Open the Command Palette (command + shift + p)
+2. select "Package Control: Install Package"
+3. Search for ""KnifeSolo" and you're done!
+
+### with git
     git clone https://github.com/amazedkoumei/SublimeKnifeSolo.git ~/Library/Application\ Support/Sublime\ Text 2/Packages/SublimeKnifeSolo
     
-You need to pre-install [knife solo](http://matschaffer.github.com/knife-solo/)
 
 Usage
 -----
