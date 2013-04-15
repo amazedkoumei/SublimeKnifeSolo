@@ -85,19 +85,28 @@ def runKnife(process, messageManager):
   stderr_reader.start()
 
   while not stdout_reader.eof() or not stderr_reader.eof():
+    stdout = ""
     while not stdout_queue.empty():
-      sublime.set_timeout(lambda:messageManager.write(stdout_queue.get()), 0)
-      time.sleep(.1)
+      stdout += stdout_queue.get()
+    else:
+      sublime.set_timeout(lambda:messageManager.write(stdout), 0)
+      time.sleep(.5)
+
+    stderr = ""
     while not stderr_queue.empty():
-      sublime.set_timeout(lambda:messageManager.write(stderr_queue.get()), 0)
-      time.sleep(.1)
+      stderr += stderr_queue.get()
+    else:
+      sublime.set_timeout(lambda:messageManager.write(stderr), 0)
+      time.sleep(.5)
+
+    time.sleep(.5)
 
   stdout_reader.join()
   stderr_reader.join()
 
   process.stdout.close()
   process.stderr.close()
-  sublime.set_timeout(lambda:messageManager.write(u"\n\n\n\n\nFINISH!!!"), 0)
+  sublime.set_timeout(lambda:messageManager.write(u"\n\nfinished\n\n"), 0)
 
 def getEncoding(str):
   for encoding in ['utf-8', 'shift-jis', 'euc-jp']:

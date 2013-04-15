@@ -40,13 +40,14 @@ class SublimeMessageManager():
     self.window.run_command('show_panel', {'panel': 'output.' + self.panelName})
 
   def write(self, text):
-    self.view.set_read_only(False)
     edit = self.view.begin_edit()
-    self.view.insert(edit, self.view.size(), text)
-    self.view.end_edit(edit)
-    self.view.set_read_only(True)
+    try:
+      self.view.insert(edit, self.view.size(), text)
+    finally:
+      self.view.end_edit(edit)
 
-    self.scroll()
+    self.scroll()    
+    #self.view.show(self.view.size())
 
   def scroll(self):
     (cur_row, _) = self.view.rowcol(self.view.size())
